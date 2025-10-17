@@ -10,49 +10,6 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_PASSWORD: ChangeThisStrongPassword123!
-      POSTGRES_USER: postgres
-      TZ: Australia/Melbourne
-    volumes:
-      - /mnt/data/apps/postgres/data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: pgadmin
-    restart: unless-stopped
-    networks:
-      - backend-network
-    ports:
-      - "5050:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@spatialdev.com.au
-      PGADMIN_DEFAULT_PASSWORD: AdminPassword123!
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-      TZ: Australia/Melbourne
-    volumes:
-      - /mnt/data/apps/postgres/pgadmin:/var/lib/pgadmin
-    depends_on:
-      - postgresversion: '3.4'
-
-networks:
-  backend-network:
-    external: true
-
-services:
-  postgres:
-    image: postgres:16
-    container_name: postgres
-    restart: unless-stopped
-    networks:
-      - backend-network
-    ports:
-      - "5432:5432"
-    environment:
       POSTGRES_PASSWORD: DavoKazem12!@
       POSTGRES_USER: postgres
       TZ: Australia/Melbourne
@@ -81,7 +38,7 @@ services:
       - /mnt/data/apps/postgres/pgadmin:/var/lib/pgadmin
     depends_on:
       - postgres
-        
+
 networks:
   backend-network:
     external: true
