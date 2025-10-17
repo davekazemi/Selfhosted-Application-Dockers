@@ -1,5 +1,4 @@
-{
-    "templates": [
+[
         {
             "description": "PostgreSQL database with pgAdmin management interface",
             "env": [
@@ -93,6 +92,4 @@
                 "/mnt/data/apps/vaultwarden"
             ]
         }
-    ],
-    "version": "3"
-}
+    ]
