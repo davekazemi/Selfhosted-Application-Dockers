@@ -1,10 +1,95 @@
 [
     {
         "name": "postgres",
-        "path": "compose/postgres.yaml"
+        "description": "PostgreSQL database with pgAdmin management interface",
+        "type": "docker-compose",
+        "logo": "https://portainer-io-assets.sfo2.digitaloceanspaces.com/logos/postgres.png",
+        "repository": {
+            "url": "https://github.com/davekazemi/Selfhosted-Application-Dockers.git",
+            "stackfile": "compose/postgres.yaml"
+        },
+        "env": [
+            {
+                "name": "POSTGRES_USER",
+                "label": "PostgreSQL User",
+                "default": "postgres"
+            },
+            {
+                "name": "POSTGRES_PASSWORD",
+                "label": "PostgreSQL Password",
+                "default": "changeme"
+            },
+            {
+                "name": "PGADMIN_DEFAULT_EMAIL",
+                "label": "pgAdmin Email",
+                "default": "admin@example.com"
+            },
+            {
+                "name": "PGADMIN_DEFAULT_PASSWORD",
+                "label": "pgAdmin Password",
+                "default": "changeme"
+            },
+            {
+                "name": "TZ",
+                "label": "Timezone",
+                "default": "Australia/Melbourne"
+            }
+        ],
+        "ports": [
+            "5432:5432",
+            "5050:80"
+        ],
+        "volumes": [
+            "/mnt/data/apps/postgres/data",
+            "/mnt/data/apps/postgres/pgadmin"
+        ]
     },
     {
         "name": "vaultwarden",
-        "path": "compose/vault.yaml"
+        "description": "Secure password manager and vault solution",
+        "type": "docker-compose",
+        "logo": "https://portainer-io-assets.sfo2.digitaloceanspaces.com/logos/vaultwarden.png",
+        "repository": {
+            "url": "https://github.com/davekazemi/Selfhosted-Application-Dockers.git",
+            "stackfile": "compose/vault.yaml"
+        },
+        "env": [
+            {
+                "name": "ADMIN_TOKEN",
+                "label": "Vaultwarden Admin Token",
+                "default": "changeme"
+            },
+            {
+                "name": "DOMAIN",
+                "label": "Vaultwarden Domain",
+                "default": "https://vault.example.com"
+            },
+            {
+                "name": "DATABASE_URL",
+                "label": "PostgreSQL Connection String",
+                "default": "postgresql://vaultwarden:vaultwarden@postgres:5432/vaultwarden"
+            },
+            {
+                "name": "SIGNUPS_ALLOWED",
+                "label": "Allow Signups",
+                "default": "false"
+            },
+            {
+                "name": "INVITATIONS_ALLOWED",
+                "label": "Allow Invitations",
+                "default": "true"
+            },
+            {
+                "name": "TZ",
+                "label": "Timezone",
+                "default": "Australia/Melbourne"
+            }
+        ],
+        "ports": [
+            "8081:80"
+        ],
+        "volumes": [
+            "/mnt/data/apps/vaultwarden"
+        ]
     }
 ]
