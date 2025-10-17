@@ -1,9 +1,5 @@
 version: '3.4'
 
-networks:
-  backend-network:
-    external: true
-
 services:
   postgres:
     image: postgres:16
@@ -85,3 +81,7 @@ services:
       - /mnt/data/apps/postgres/pgadmin:/var/lib/pgadmin
     depends_on:
       - postgres
+        
+networks:
+  backend-network:
+    external: true
