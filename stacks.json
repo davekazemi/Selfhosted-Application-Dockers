@@ -1,0 +1,10 @@
+[
+    {
+        "name": "postgres",
+        "path": "compose/postgres.yaml"
+    },
+    {
+        "name": "vaultwarden",
+        "path": "compose/vault.yaml"
+    }
+]
