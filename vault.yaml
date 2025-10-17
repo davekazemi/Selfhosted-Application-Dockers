@@ -1,0 +1,33 @@
+version: '3.4'
+
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    networks:
+      - backend-network
+    ports:
+      - "8081:80"
+    environment:
+      # PostgreSQL connection - using existing postgres container
+      DATABASE_URL: postgresql://vaultwarden:vaultwarden@postgres:5432/vaultwarden
+      
+      # Domain settings
+      DOMAIN: https://vault.spatialdev.com.au
+      
+      # Security settings
+      SIGNUPS_ALLOWED: 'false'
+      INVITATIONS_ALLOWED: 'true'
+      SHOW_PASSWORD_HINT: 'false'
+      
+      # Admin settings (set a strong token)
+      ADMIN_TOKEN: sXDFSRFsjsuUiojsTksg
+      
+      TZ: Australia/Melbourne
+    volumes:
+      - /mnt/data/apps/vaultwarden:/data
+
+networks:
+  backend-network:
+    external: true
