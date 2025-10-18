@@ -1,0 +1,12 @@
+# Ignore everything by default
+*
+
+# But keep the compose directory and its contents
+!compose/
+!compose/**
+
+# Keep .gitignore itself
+!.gitignore
+
+# Keep README.md if you want documentation
+!README.md
