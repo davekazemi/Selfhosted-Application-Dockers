@@ -1,0 +1,103 @@
+version: "3.9"
+
+services:
+  paperless-redis:
+    image: docker.io/library/redis:8
+    container_name: paperless-redis
+    restart: unless-stopped
+    volumes:
+      - /mnt/data/apps/paperless/redis:/data
+    networks:
+      - backend-network
+
+  paperless-ngx:
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    container_name: paperless-ngx
+    restart: unless-stopped
+    depends_on:
+      - paperless-redis
+    ports:
+      - "8086:8000"
+    volumes:
+      - /mnt/data/apps/paperless/data:/usr/src/paperless/data
+      - /mnt/data/apps/paperless/media:/usr/src/paperless/media
+      - /mnt/data/apps/paperless/export:/usr/src/paperless/export
+      - /mnt/data/apps/paperless/consume:/usr/src/paperless/consume
+    environment:
+      # ===== REDIS =====
+      - PAPERLESS_REDIS=redis://paperless-redis:6379
+
+      # ===== DATABASE (Using existing PostgreSQL) =====
+      - PAPERLESS_DBHOST=postgres
+      - PAPERLESS_DBPORT=5432
+      - PAPERLESS_DBNAME=paperless
+      - PAPERLESS_DBUSER=paperless
+      - PAPERLESS_DBPASS=paperless
+      - PAPERLESS_DBSSLMODE=prefer
+
+      # ===== SECURITY =====
+      # CRITICAL: Change this to a long random string
+      # Generate with: openssl rand -base64 32
+      - PAPERLESS_SECRET_KEY=change-me-to-a-long-random-string
+
+      # ===== GENERAL SETTINGS =====
+      - PAPERLESS_TIME_ZONE=Australia/Melbourne
+      - PAPERLESS_OCR_LANGUAGE=eng
+
+      # Additional OCR languages (uncomment and add as needed)
+      # Available: deu fra ita spa por rus chi-sim chi-tra jpn ara hin
+      # - PAPERLESS_OCR_LANGUAGES=deu fra
+
+      # ===== USER MAPPING =====
+      # Set to your host user UID/GID for proper file permissions
+      - USERMAP_UID=0
+      - USERMAP_GID=0
+
+      # ===== URL CONFIGURATION =====
+      # REQUIRED: Set to the URL you use to access Paperless
+      - PAPERLESS_URL=https://paperless.spatialdev.com.au
+      - PAPERLESS_CSRF_TRUSTED_ORIGINS=https://paperless.spatialdev.com.au,http://192.168.50.215:8086
+
+      # ===== ADMIN USER =====
+      # Uncomment to create admin user on first run
+      # - PAPERLESS_ADMIN_USER=admin
+      # - PAPERLESS_ADMIN_PASSWORD=changeme
+      # - PAPERLESS_ADMIN_MAIL=admin@example.com
+
+      # ===== CONSUMPTION =====
+      # Automatically delete files after consumption
+      - PAPERLESS_CONSUMER_DELETE_DUPLICATES=true
+      - PAPERLESS_CONSUMER_RECURSIVE=true
+      - PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS=true
+
+      # ===== OCR SETTINGS =====
+      - PAPERLESS_OCR_MODE=skip_noarchive
+      - PAPERLESS_OCR_CLEAN=clean
+      - PAPERLESS_OCR_DESKEW=true
+      - PAPERLESS_OCR_ROTATE_PAGES=true
+      - PAPERLESS_OCR_ROTATE_PAGES_THRESHOLD=12
+
+      # ===== TIKA (Advanced document parsing) =====
+      # Uncomment to enable Tika for better Office document support
+      # - PAPERLESS_TIKA_ENABLED=1
+      # - PAPERLESS_TIKA_ENDPOINT=http://paperless-tika:9998
+      # - PAPERLESS_TIKA_GOTENBERG_ENDPOINT=http://paperless-gotenberg:3000
+
+      # ===== FEATURES =====
+      - PAPERLESS_TASK_WORKERS=2
+      - PAPERLESS_THREADS_PER_WORKER=1
+      - PAPERLESS_WORKER_TIMEOUT=1800
+
+      # ===== FILENAME FORMAT =====
+      # Customize how files are named after processing
+      # - PAPERLESS_FILENAME_FORMAT={created_year}/{correspondent}/{title}
+
+      # ===== LOGGING =====
+      - PAPERLESS_LOGROTATE_MAX_SIZE=1024
+      - PAPERLESS_LOGROTATE_MAX_BACKUPS=20
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    external: true

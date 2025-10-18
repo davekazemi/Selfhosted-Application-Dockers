@@ -1,0 +1,106 @@
+version: "3.9"
+
+services:
+  affine-redis:
+    image: redis:latest
+    container_name: affine-redis
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'redis-cli', '--raw', 'incr', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend-network
+
+  affine-migration:
+    image: ghcr.io/toeverything/affine:stable
+    container_name: affine-migration
+    command: ['sh', '-c', 'node ./scripts/self-host-predeploy.js']
+    volumes:
+      - /mnt/data/apps/affine/storage:/root/.affine/storage
+      - /mnt/data/apps/affine/config:/root/.affine/config
+    environment:
+      # ===== DATABASE (Using existing PostgreSQL) =====
+      - DATABASE_URL=postgresql://affine:affine@postgres:5432/affine
+
+      # ===== REDIS =====
+      - REDIS_SERVER_HOST=affine-redis
+
+      # ===== INDEXER =====
+      - AFFINE_INDEXER_ENABLED=false
+    depends_on:
+      affine-redis:
+        condition: service_healthy
+    networks:
+      - backend-network
+    restart: "no"
+
+  affine:
+    image: ghcr.io/toeverything/affine:stable
+    container_name: affine
+    restart: unless-stopped
+    ports:
+      - "8087:3010"
+    volumes:
+      - /mnt/data/apps/affine/storage:/root/.affine/storage
+      - /mnt/data/apps/affine/config:/root/.affine/config
+    environment:
+      # ===== DATABASE (Using existing PostgreSQL) =====
+      - DATABASE_URL=postgresql://affine:affine@postgres:5432/affine
+
+      # ===== REDIS =====
+      - REDIS_SERVER_HOST=affine-redis
+
+      # ===== SERVER CONFIGURATION =====
+      - AFFINE_CONFIG_PATH=/root/.affine/config
+      - AFFINE_SERVER_PORT=3010
+
+      # ===== PUBLIC URL =====
+      # Set this to your public domain if exposing via Cloudflare
+      - AFFINE_SERVER_HTTPS=true
+      - AFFINE_SERVER_HOST=affine.spatialdev.com.au
+      # Or use AFFINE_SERVER_EXTERNAL_URL instead:
+      # - AFFINE_SERVER_EXTERNAL_URL=https://affine.spatialdev.com.au
+
+      # ===== FEATURES =====
+      - AFFINE_INDEXER_ENABLED=false
+
+      # ===== ADMIN =====
+      # Uncomment to set admin email (first user to sign up becomes admin)
+      - AFFINE_ADMIN_EMAIL=dave.kazemi@gmail.com
+      - AFFINE_ADMIN_PASSWORD=DavoKazem12!@
+
+      # ===== STORAGE =====
+      - AFFINE_STORAGE_PROVIDER=fs
+
+      # ===== AUTHENTICATION =====
+      # Enable/disable authentication methods
+      - AFFINE_AUTH_PASSWORD_ENABLED=true
+      - AFFINE_AUTH_GOOGLE_ENABLED=true
+      # - AFFINE_AUTH_GITHUB_ENABLED=false
+
+      # ===== MAILER (Optional - for email notifications) =====
+      - MAILER_HOST=smtp.gmail.com
+      - MAILER_PORT=587
+      - MAILER_USER=dave.kazemi@gmail.com
+      - MAILER_PASSWORD=vblf heun qinh kuma
+      - MAILER_SENDER=dave.kazemi@gmail.com
+
+      # ===== TELEMETRY =====
+      - TELEMETRY_ENABLE=false
+
+      # ===== RATE LIMITING =====
+      - THROTTLE_TTL=60
+      - THROTTLE_LIMIT=120
+    depends_on:
+      affine-redis:
+        condition: service_healthy
+      affine-migration:
+        condition: service_completed_successfully
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    external: true

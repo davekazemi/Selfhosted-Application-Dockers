@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  stremio:
+    image: tsaridas/stremio-docker:latest
+    container_name: stremio
+    restart: unless-stopped
+    environment:
+      - NO_CORS=1
+      - AUTO_SERVER_URL=1
+      - TZ=Australia/Melbourne
+    ports:
+      - "8084:8080"
+    volumes:
+      - /mnt/data/apps/stremio:/root/.stremio-server
+    shm_size: "1gb"
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    external: true

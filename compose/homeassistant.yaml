@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: homeassistant
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    volumes:
+      - /mnt/data/apps/homeassistant/config:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    environment:
+      - TZ=Australia/Melbourne
+    # Uncomment if you have issues with large page sizes on ARM64
+    # - DISABLE_JEMALLOC=true
+
+# Note: Home Assistant uses network_mode: host, so it doesn't need to be in backend-network
+# It will be accessible at http://192.168.50.215:8123
+

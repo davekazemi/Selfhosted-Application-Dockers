@@ -1,0 +1,28 @@
+#!/usr/bin/with-contenv bash
+
+# Wait for desktop to be ready
+sleep 5
+
+# Update desktop database
+if [ -d "/usr/share/applications" ]; then
+    update-desktop-database /usr/share/applications 2>/dev/null || true
+fi
+
+if [ -d "/usr/local/share/applications" ]; then
+    update-desktop-database /usr/local/share/applications 2>/dev/null || true
+fi
+
+# Update icon cache
+for icon_dir in /usr/share/icons/*; do
+    if [ -d "$icon_dir" ]; then
+        gtk-update-icon-cache -f -t "$icon_dir" 2>/dev/null || true
+    fi
+done
+
+# Update MIME database
+if [ -d "/usr/share/mime" ]; then
+    update-mime-database /usr/share/mime 2>/dev/null || true
+fi
+
+echo "[fix-desktop] Desktop database and icon cache updated"
+

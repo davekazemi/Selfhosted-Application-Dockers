@@ -1,0 +1,108 @@
+version: "3.9"
+
+services:
+  penpot-frontend:
+    image: penpotapp/frontend:latest
+    container_name: penpot-frontend
+    restart: unless-stopped
+    ports:
+      - "8088:8080"
+    volumes:
+      - /mnt/data/apps/penpot/assets:/opt/data/assets
+    depends_on:
+      - penpot-backend
+      - penpot-exporter
+    networks:
+      - backend-network
+    environment:
+      # ===== FLAGS =====
+      - PENPOT_FLAGS=enable-prepl-server enable-smtp disable-email-verification disable-secure-session-cookies disable-registration
+
+      # ===== HTTP BODY SIZE =====
+      - PENPOT_HTTP_SERVER_MAX_BODY_SIZE=31457280
+      - PENPOT_HTTP_SERVER_MAX_MULTIPART_BODY_SIZE=367001600
+
+  penpot-backend:
+    image: penpotapp/backend:latest
+    container_name: penpot-backend
+    restart: unless-stopped
+    volumes:
+      - /mnt/data/apps/penpot/assets:/opt/data/assets
+    depends_on:
+      penpot-valkey:
+        condition: service_healthy
+    networks:
+      - backend-network
+    environment:
+      # ===== FLAGS =====
+      - PENPOT_FLAGS=enable-prepl-server enable-smtp disable-email-verification disable-secure-session-cookies disable-registration
+
+      # ===== PUBLIC URI =====
+      - PENPOT_PUBLIC_URI=https://penpot.spatialdev.com.au
+
+      # ===== HTTP BODY SIZE =====
+      - PENPOT_HTTP_SERVER_MAX_BODY_SIZE=31457280
+      - PENPOT_HTTP_SERVER_MAX_MULTIPART_BODY_SIZE=367001600
+
+      # ===== SECRET KEY =====
+      # Generate with: python3 -c "import secrets; print(secrets.token_urlsafe(64))"
+      - PENPOT_SECRET_KEY=xK9mP2vL8nQ4wR7tY6uI3oP5aS1dF0gH2jK4lZ9xC8vB7nM6qW3eR5tY8uI1oP4aS
+
+      # ===== PREPL HOST (for admin CLI access) =====
+      - PENPOT_PREPL_HOST=0.0.0.0
+
+      # ===== DATABASE (Using existing PostgreSQL) =====
+      - PENPOT_DATABASE_URI=postgresql://postgres:5432/penpot
+      - PENPOT_DATABASE_USERNAME=penpot
+      - PENPOT_DATABASE_PASSWORD=penpot
+
+      # ===== REDIS/VALKEY =====
+      - PENPOT_REDIS_URI=redis://penpot-valkey:6379/0
+
+      # ===== ASSETS STORAGE =====
+      - PENPOT_ASSETS_STORAGE_BACKEND=assets-fs
+      - PENPOT_STORAGE_ASSETS_FS_DIRECTORY=/opt/data/assets
+
+      # ===== TELEMETRY =====
+      - PENPOT_TELEMETRY_ENABLED=false
+
+      # ===== SMTP (Optional - configure for email notifications) =====
+      - PENPOT_SMTP_DEFAULT_FROM=dave.kazemi@gmail.com
+      - PENPOT_SMTP_DEFAULT_REPLY_TO=dave.kazemi@gmail.com
+      - PENPOT_SMTP_HOST=smtp.gmail.com
+      - PENPOT_SMTP_PORT=587
+      - PENPOT_SMTP_USERNAME=dave.kazemi@gmail.com
+      - PENPOT_SMTP_PASSWORD=vblf heun qinh kuma
+      - PENPOT_SMTP_TLS=true
+      - PENPOT_SMTP_SSL=false
+
+  penpot-exporter:
+    image: penpotapp/exporter:latest
+    container_name: penpot-exporter
+    restart: unless-stopped
+    depends_on:
+      penpot-valkey:
+        condition: service_healthy
+    networks:
+      - backend-network
+    environment:
+      # Internal docker network communication
+      - PENPOT_PUBLIC_URI=http://penpot-frontend:8080
+      - PENPOT_REDIS_URI=redis://penpot-valkey:6379/0
+
+  penpot-valkey:
+    image: valkey/valkey:8.1
+    container_name: penpot-valkey
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "valkey-cli ping | grep PONG"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+      start_period: 3s
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    external: true

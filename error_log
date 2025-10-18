@@ -1,0 +1,4 @@
+2025-10-18 16:58:16.237 ERROR (MainThread) [homeassistant.components.http.forwarded] A request from a reverse proxy was received from 192.168.50.210, but your HTTP integration is not set-up for reverse proxies
+2025-10-18 16:58:16.312 ERROR (MainThread) [homeassistant.components.http.forwarded] A request from a reverse proxy was received from 192.168.50.210, but your HTTP integration is not set-up for reverse proxies
+2025-10-18 16:58:18.182 ERROR (MainThread) [homeassistant.components.http.forwarded] A request from a reverse proxy was received from 192.168.50.210, but your HTTP integration is not set-up for reverse proxies
+2025-10-18 16:58:18.251 ERROR (MainThread) [homeassistant.components.http.forwarded] A request from a reverse proxy was received from 192.168.50.210, but your HTTP integration is not set-up for reverse proxies

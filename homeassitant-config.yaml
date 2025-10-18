@@ -1,0 +1,87 @@
+# Home Assistant Configuration
+# https://www.home-assistant.io/docs/configuration/
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# ===== HOMEASSISTANT =====
+homeassistant:
+  name: Home
+  # External URL for Cloudflare Zero Trust
+  external_url: https://home.spatialdev.com.au
+  internal_url: http://192.168.50.215:8123
+
+  # Location (update these values)
+  latitude: -37.8136
+  longitude: 144.9631
+  elevation: 31
+
+  # Units and locale
+  unit_system: metric
+  currency: AUD
+  country: AU
+  time_zone: Australia/Melbourne
+
+# ===== HTTP =====
+http:
+  # Required for Cloudflare Zero Trust
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 172.30.33.0/24
+    - 192.168.50.0/24
+    - 192.168.50.210
+
+# ===== AUTHENTICATION =====
+auth_providers:
+  # Default Home Assistant authentication (keep as fallback)
+  - type: homeassistant
+
+  # Google OAuth authentication
+  # Get credentials from: https://console.cloud.google.com/
+  # Add redirect URI: https://home.spatialdev.com.au/auth/external/callback
+  - type: google
+    client_id: 95248835294-dr6jatffj22clp0ijt18oon9mrl3tra6.apps.googleusercontent.com
+    client_secret: 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
+
+  # Optional: Trusted networks for local access without login
+  # Uncomment to enable automatic login from local network
+  # - type: trusted_networks
+  #   trusted_networks:
+  #     - 192.168.50.0/24
+  #   allow_bypass_login: true
+
+# ===== RECORDER (PostgreSQL Database) =====
+recorder:
+  db_url: postgresql://homeassistant:homeassistant@192.168.50.215:5432/homeassistant
+  purge_keep_days: 30
+  commit_interval: 5
+  auto_purge: true
+  auto_repack: true
+
+  # Exclude noisy entities to reduce database size
+  exclude:
+    domains:
+      - automation
+      - updater
+    entity_globs:
+      - sensor.weather_*
+    entities:
+      - sun.sun
+      - sensor.date
+      - sensor.time
+
+# ===== LOGGER =====
+logger:
+  default: info
+  logs:
+    homeassistant.core: warning
+    homeassistant.components.http: warning
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+# ===== AUTOMATIONS, SCRIPTS, SCENES =====
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml

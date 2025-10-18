@@ -1,0 +1,100 @@
+INFO:gst_app_resize:XFCE detected. Applying xfconf-query for DPI 96.
+INFO:webrtc_input:Clipboard monitor running (binary mode: True)
+INFO:gst_app_resize:Found active XFCE session environment. Commands will be executed within this context.
+INFO:gst_app_resize:Successfully set XFCE DPI to 96 using xfconf-query.
+INFO:gst_app_resize:Attempting to set cursor size to: 32 (based on DPI 96)
+INFO:gst_app_resize:Successfully set cursor size to 32
+INFO:data_websocket:Initial setup or dimensional change detected for 'primary'. Performing full display reconfiguration.
+INFO:data_websocket:Starting display reconfiguration...
+INFO:data_websocket:Calculating new extended desktop layout from ALL clients...
+INFO:data_websocket:Aligned total width from 1874 to 1880 for xrandr.
+INFO:data_websocket:Layout calculated: Total Size=1880x922. Layouts: {'primary': {'x': 0, 'y': 0, 'w': 1874, 'h': 922}}
+INFO:data_websocket:Mode 1880x922 not found. Creating it.
+INFO:data_websocket:Defining logical monitors for the window manager...
+INFO:data_websocket:Starting separate capture instances for each ACTIVE display region...
+INFO:data_websocket:Client 'primary' is active. Starting its capture.
+INFO:data_websocket:Preparing to start capture for display='primary': Res=1874x922, Offset=0x0
+INFO:data_websocket:Video chunk sender started for display 'primary'.
+INFO:data_websocket:SUCCESS: Capture started for 'primary'.
+INFO:data_websocket:New frame backpressure task started for display 'primary'.
+INFO:data_websocket:Broadcasting primary stream resolution to all clients: {"type": "stream_resolution", "width": 1874, "height": 922}
+INFO:data_websocket:Broadcasting display config update: DISPLAY_CONFIG_UPDATE,{"type": "display_config_update", "displays": ["primary"]}
+INFO:data_websocket:Display reconfiguration finished successfully.
+INFO:data_websocket:Reconfiguration process complete (state unlocked).
+INFO:data_websocket:Initial client settings message processed by ws_handler.
+INFO:data_websocket:Initial setup: Primary client connected, audio not active, attempting start.
+INFO:data_websocket:Starting pcmflux audio pipeline...
+INFO:data_websocket:pcmflux settings: device='output.monitor', bitrate=320000, channels=2
+INFO:data_websocket:Frame-based backpressure logic task started for display 'primary'.
+INFO:data_websocket:Client settings received, proceeding with backpressure loop for 'primary'.
+INFO:data_websocket:pcmflux audio capture started successfully.
+[pcmflux] Attempting to connect to PulseAudio device: output.monitor...
+INFO:data_websocket:pcmflux audio chunk broadcasting task started.
+X Shared Memory Extension available.
+XShm setup complete for 1874x922.
+CPU cores available: 16
+Stream settings active -> Res: 1874x922 | FPS: 60.0 | Stripes: 1 | Mode: H264 (CPU) FullFrame | CRF: 25 | PaintOver CRF: 18 (Burst: 5f) | Colorspace: I420 (Limited Range) | Damage Thresh: 10f | Damage Dur: 20f
+[pcmflux] SUCCESS: Connected to PulseAudio.
+[pcmflux] SUCCESS: Opus encoder created.
+[pcmflux] Capture loop started. Device: output.monitor, Rate: 48000, Channels: 2, Bitrate: 320 kbps, VBR: On, Silence Gate: Off, Debug Logging: Off, PCM Chunk: 3840 bytes
+INFO:data_websocket:Received START_AUDIO command from client for server-to-client audio.
+INFO:data_websocket:START_AUDIO: pcmflux audio pipeline already active.
+INFO:data_websocket:Received resize request for primary: 1872x920 from ('127.0.0.1', 33130)
+INFO:gst_app_resize:on_resize_handler for display 'primary' with resolution: 1872x920
+INFO:gst_app_resize:Display client 'primary' dimensions updated to 1872x920. Triggering reconfiguration.
+INFO:data_websocket:Starting display reconfiguration...
+INFO:data_websocket:Stopping all existing capture and backpressure tasks...
+INFO:data_websocket:Backpressure logic task for 'primary' cancelled.
+INFO:data_websocket:Backpressure logic task for 'primary' finished.
+INFO:data_websocket:Backpressure task for 'primary' was stopped. Resetting its frame IDs.
+INFO:data_websocket:Resetting frame IDs for display 'primary'.
+INFO:data_websocket:Broadcasting primary pipeline reset to all 1 clients: PIPELINE_RESETTING primary
+Capture loop stopped. X resources released.
+INFO:data_websocket:All capture instances, senders, and backpressure tasks stopped.
+INFO:data_websocket:Calculating new extended desktop layout from ALL clients...
+INFO:data_websocket:Layout calculated: Total Size=1872x920. Layouts: {'primary': {'x': 0, 'y': 0, 'w': 1872, 'h': 920}}
+INFO:data_websocket:Video chunk sender for 'primary' cancelled.
+INFO:data_websocket:Video chunk sender for 'primary' finished.
+INFO:data_websocket:Mode 1872x920 not found. Creating it.
+INFO:data_websocket:Defining logical monitors for the window manager...
+INFO:data_websocket:Starting separate capture instances for each ACTIVE display region...
+INFO:data_websocket:Client 'primary' is active. Starting its capture.
+INFO:data_websocket:Preparing to start capture for display='primary': Res=1872x920, Offset=0x0
+INFO:data_websocket:Video chunk sender started for display 'primary'.
+INFO:data_websocket:SUCCESS: Capture started for 'primary'.
+INFO:data_websocket:New frame backpressure task started for display 'primary'.
+INFO:data_websocket:Broadcasting primary stream resolution to all clients: {"type": "stream_resolution", "width": 1872, "height": 920}
+INFO:data_websocket:Broadcasting display config update: DISPLAY_CONFIG_UPDATE,{"type": "display_config_update", "displays": ["primary"]}
+INFO:data_websocket:Display reconfiguration finished successfully.
+INFO:data_websocket:Reconfiguration process complete (state unlocked).
+INFO:data_websocket:Frame-based backpressure logic task started for display 'primary'.
+INFO:data_websocket:Client settings received, proceeding with backpressure loop for 'primary'.
+X Shared Memory Extension available.
+XShm setup complete for 1872x920.
+CPU cores available: 16
+Stream settings active -> Res: 1872x920 | FPS: 60.0 | Stripes: 1 | Mode: H264 (CPU) FullFrame | CRF: 25 | PaintOver CRF: 18 (Burst: 5f) | Colorspace: I420 (Limited Range) | Damage Thresh: 10f | Damage Dur: 20f
+[pcmflux] First non-silent audio chunk detected! Encoding...
+INFO:webrtc_input:Set clipboard content, length: 575
+INFO:data_websocket:Attempting to execute command: 'st ~/.local/bin/proot-apps remove remmina'
+INFO:data_websocket:Successfully launched command: 'st ~/.local/bin/proot-apps remove remmina' with PID 749
+INFO:data_websocket:Attempting to execute command: 'st ~/.local/bin/proot-apps install remmina'
+INFO:data_websocket:Successfully launched command: 'st ~/.local/bin/proot-apps install remmina' with PID 770
+INFO:data_websocket:Attempting to execute command: 'st ~/.local/bin/proot-apps remove remmina'
+INFO:data_websocket:Successfully launched command: 'st ~/.local/bin/proot-apps remove remmina' with PID 835
+INFO:data_websocket:Attempting to execute command: 'st ~/.local/bin/proot-apps install remmina'
+INFO:data_websocket:Successfully launched command: 'st ~/.local/bin/proot-apps install remmina' with PID 857
+INFO:data_websocket:Attempting to execute command: 'st ~/.local/bin/proot-apps update flameshot'
+INFO:data_websocket:Successfully launched command: 'st ~/.local/bin/proot-apps update flameshot' with PID 1694
+INFO:data_websocket:Attempting to execute command: 'st ~/.local/bin/proot-apps update remmina'
+INFO:data_websocket:Successfully launched command: 'st ~/.local/bin/proot-apps update remmina' with PID 1844
+INFO:data_websocket:Received STOP_VIDEO for 'primary'. Stopping stream.
+INFO:data_websocket:Stopping all streams for display 'primary'...
+INFO:data_websocket:Backpressure logic task for 'primary' cancelled.
+INFO:data_websocket:Backpressure logic task for 'primary' finished.
+INFO:data_websocket:Backpressure task for 'primary' was stopped. Resetting its frame IDs.
+INFO:data_websocket:Resetting frame IDs for display 'primary'.
+INFO:data_websocket:Broadcasting primary pipeline reset to all 1 clients: PIPELINE_RESETTING primary
+Capture loop stopped. X resources released.
+INFO:data_websocket:Successfully stopped all streams for display 'primary'.
+INFO:data_websocket:Video chunk sender for 'primary' cancelled.
+INFO:data_websocket:Video chunk sender for 'primary' finished.
